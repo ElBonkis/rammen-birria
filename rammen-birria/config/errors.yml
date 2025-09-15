@@ -1,0 +1,10 @@
+errors:
+  es:
+    auth:
+      invalid_credentials: "Email o contraseña incorrectos."
+      unauthorized: "No tienes permisos para acceder a este recurso."
+    users:
+      not_found: "Usuario no encontrado."
+      already_exists: "Ya existe un usuario con este correo."
+    generic:
+      server_error: "Ha ocurrido un error inesperado. Inténtalo más tarde."

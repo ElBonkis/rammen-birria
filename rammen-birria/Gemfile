@@ -1,0 +1,39 @@
+source "https://rubygems.org"
+
+gem "rails", "~> 8.0.2", ">= 8.0.2.1"
+gem "pg", "~> 1.1"
+gem "puma", ">= 5.0"
+
+#--------------------------
+gem "rails-i18n"
+gem "jbuilder"
+gem "rspec-rails"
+gem "factory_bot_rails"
+gem "faker"
+gem "shoulda-matchers"
+gem "rack-attack"
+gem "jwt", "~> 3.1"
+gem "aws-sdk-s3"
+gem "image_processing"
+gem "byebug"
+#--------------------------
+
+gem "tzinfo-data", platforms: %i[ windows jruby ]
+gem "solid_cache"
+gem "solid_queue"
+gem "solid_cable"
+
+gem "bootsnap", require: false
+gem "kamal", require: false
+gem "bcrypt", "~> 3.1"
+
+
+gem "rack-cors", "~> 3.0"
+gem "redis", "~> 5.4"
+gem "thruster", require: false
+
+group :development, :test do
+  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem "brakeman", require: false
+  gem "rubocop-rails-omakase", require: false
+end

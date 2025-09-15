@@ -1,0 +1,35 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 10) %>
+  username: <%= ENV.fetch("PGUSER", "postgres") %>
+  password: <%= ENV.fetch("PGPASSWORD", "postgres") %>
+  host: <%= ENV.fetch("PGHOST", "rammen-birria-db") %>
+  port: <%= ENV.fetch("PGPORT", 5432) %>
+
+development:
+  <<: *default
+  database: rammen_birria_development
+
+test:
+  <<: *default
+  database: rammen_birria_test
+
+production:
+  primary: &primary_production
+    <<: *default
+    database: rammen_birria_production
+    username: rammen_birria
+    password: <%= ENV["RAMMEN_BIRRIA_DATABASE_PASSWORD"] %>
+  cache:
+    <<: *primary_production
+    database: rammen_birria_production_cache
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *primary_production
+    database: rammen_birria_production_queue
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *primary_production
+    database: rammen_birria_production_cable
+    migrations_paths: db/cable_migrate
