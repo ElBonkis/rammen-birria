@@ -16,6 +16,7 @@ gem "jwt", "~> 3.1"
 gem "aws-sdk-s3"
 gem "image_processing"
 gem "byebug"
+gem "rails-erd"
 #--------------------------
 
 gem "tzinfo-data", platforms: %i[ windows jruby ]
