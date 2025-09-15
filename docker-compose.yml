@@ -1,0 +1,65 @@
+services:
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: rammen_birria_development
+    ports: ["5432:5432"]
+    volumes: ["db-data:/var/lib/postgresql/data"]
+    networks: ["appnet"]
+
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]
+    networks: ["appnet"]
+
+  backend:
+    build:
+      context: ./rammen-birria
+      dockerfile: Dockerfile
+    command: bash -lc "bundle exec rails db:prepare && bundle exec rails s -b 0.0.0.0 -p 3000"
+    environment:
+      RAILS_ENV: development
+      SECRET_KEY_BASE: e56aad8f5918700f120c7a749998a1429a10920abdbbe3d022a218b80371c7bed883276ad333416cdb31adbc473db56e24d0a70907f9cabff109a85e4fde82cc
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/rammen_birria_development
+      FRONTEND_ORIGIN: http://localhost:5173
+      COOKIE_DOMAIN: ""
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: us-east-2
+      AWS_BUCKET: rammen-birria-assets
+    volumes:
+      - ./rammen-birria:/app
+    ports: ["3000:3000"]
+    depends_on: ["db", "redis"]
+    networks: ["appnet"]
+
+  frontend:
+    build:
+      context: ./rammen-birria-web
+    command: npm run dev -- --host
+    environment:
+      VITE_PROXY_TARGET: http://backend:3000   # 👈 nuevo
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+    volumes:
+      - ./rammen-birria-web:/app
+      - /app/node_modules
+    ports: ["5173:5173"]
+    networks: ["appnet"]
+    depends_on: ["backend"]
+  
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    ports:
+      - "8025:8025"  # UI web
+      - "1025:1025"  # SMTP
+
+
+volumes:
+  db-data:
+
+networks:
+  appnet:
+    driver: bridge
