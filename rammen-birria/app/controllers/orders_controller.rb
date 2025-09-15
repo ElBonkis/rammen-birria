@@ -55,6 +55,7 @@ class OrdersController < ApplicationController
       qty     = Integer(it[:quantity] || 1)
       qty     = 1 if qty <= 0
 
+      unit_price = product.price
       price_with_discount = product.price_with_discount
       subtotal = (price_with_discount * qty).round(2)
       subtotal     = (unit_price * qty).round(2)
@@ -63,9 +64,9 @@ class OrdersController < ApplicationController
       computed << {
         product_id:        product.id,
         name:              product.name,
-        base_price:        base_price,
-        discount_percent:  max_discount,
-        unit_price:        unit_price,
+        base_price:        unit_price,
+        discount_percent:  product.max_discount,
+        unit_price:        price_with_discount,
         quantity:          qty,
         subtotal:          subtotal
       }

@@ -11,8 +11,12 @@ class Product < ApplicationRecord
     if association(:categories).loaded?
       (categories.map { |c| c.discount.to_i }.max || 0).clamp(0, 100)
     else
-      categories.maximum(:discount).to_i.clamp(0, 100)
+      max_discount
     end
+  end
+
+  def max_discount
+    categories.maximum(:discount).to_i.clamp(0, 100)
   end
 
   def price_with_discount
