@@ -42,7 +42,7 @@ router.beforeEach(async (to) => {
     try { await auth.refresh(); }
     catch { return { path: "/login", query: { redirect: to.fullPath } }; }
   }
-  if (to.meta.guestOnly && auth.token) return { path: "/dashboard" };
+  if (to.meta.guestOnly && auth.token) return { path: "/products" };
 });
 
 export default router;
